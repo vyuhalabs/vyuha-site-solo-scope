@@ -1,0 +1,143 @@
+---
+interface Props {
+  caption?: string;
+}
+const { caption = "The Inbox: the decisions that need a person." } = Astro.props;
+
+const items = [
+  {
+    tier: "Approve",
+    tone: "solid",
+    title: "Merge pull request #128: CSV export for invoices",
+    meta: "ENG-42 · builder agent · 5 of 5 checks verified",
+    actions: true,
+  },
+  {
+    tier: "Approve",
+    tone: "solid",
+    title: "Raise the Billing pod budget from $40 to $60 this cycle",
+    meta: "Budget · 80% of the spending threshold used",
+    actions: true,
+  },
+  {
+    tier: "Notify",
+    tone: "accent",
+    title: "Upgrade the HTTP client in api-gateway",
+    meta: "ENG-37 · dependency update · verified · you may object",
+    actions: false,
+  },
+  {
+    tier: "Autonomous",
+    tone: "plain",
+    title: "Ran tests and lint on ENG-45",
+    meta: "Recorded in the audit trail",
+    actions: false,
+  },
+];
+---
+
+<figure class="illustration">
+  <div class="ui-frame" aria-hidden="true">
+    <div class="ui-bar">
+      <span>Inbox</span>
+      <span class="ui-chip ui-chip-accent">2 need you</span>
+    </div>
+    <ul class="list">
+      {
+        items.map((item) => (
+          <li class:list={["item", { done: item.tone === "plain" }]}>
+            <div class="row">
+              <span
+                class:list={[
+                  "ui-chip",
+                  { "ui-chip-solid": item.tone === "solid", "ui-chip-accent": item.tone === "accent" },
+                ]}
+              >
+                {item.tier}
+              </span>
+              <span class="title">{item.title}</span>
+            </div>
+            <div class="ui-mono meta">{item.meta}</div>
+            {item.actions && (
+              <div class="buttons">
+                <span class="btn btn-primary">Approve</span>
+                <span class="btn">Decline</span>
+                <span class="btn">Open evidence</span>
+              </div>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <figcaption>
+    {caption}
+    <span class="visually-hidden">
+      The illustration shows an Inbox with four entries. Two need approval: merging pull request
+      #128 for issue ENG-42 after five of five checks were verified, and raising a pod budget from
+      $40 to $60 for the cycle. One is a notify decision: a verified dependency update that merges
+      unless you object. One was autonomous: tests and lint ran and were recorded in
+      the audit trail.
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .item {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .item:last-child {
+    border-bottom: 0;
+  }
+
+  .item.done {
+    background: var(--color-bg-subtle);
+  }
+
+  .row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    min-width: 0;
+  }
+
+  .title {
+    font-weight: var(--weight-semibold);
+    min-width: 0;
+  }
+
+  .meta {
+    padding-left: 0;
+  }
+
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .btn {
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text);
+    background: var(--color-surface);
+  }
+
+  .btn-primary {
+    background: var(--color-text);
+    border-color: var(--color-text);
+    color: var(--color-surface);
+  }
+</style>

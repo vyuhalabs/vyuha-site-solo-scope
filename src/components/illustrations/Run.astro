@@ -1,0 +1,242 @@
+---
+interface Props {
+  caption?: string;
+}
+const { caption = "A run and the evidence it left." } = Astro.props;
+
+const evidence = [
+  { kind: "Command", label: "pnpm test", result: "148 passed · exit 0", mark: "check" },
+  { kind: "Command", label: "pnpm lint", result: "0 problems · exit 0", mark: "check" },
+  { kind: "Screenshot", label: "invoices-export.png", result: "1440 × 900", mark: "shot" },
+  { kind: "Pull request", label: "#128", result: "6 files · +214 −31", mark: "pr" },
+  { kind: "Review", label: "reviewer agent", result: "approved", mark: "check" },
+];
+---
+
+<figure class="illustration">
+  <div class="ui-frame" aria-hidden="true">
+    <div class="ui-bar">
+      <span class="mono-title">run r-2381</span>
+      <span class="ui-chip ui-chip-solid">Verified</span>
+    </div>
+    <div class="body">
+      <p class="issue"><span class="ui-mono">ENG-42</span> Add CSV export to invoices</p>
+      <dl class="facts">
+        <div><dt>Agent</dt><dd>builder agent</dd></div>
+        <div><dt>Harness</dt><dd class="ui-mono">claude-code</dd></div>
+        <div><dt>Machine</dt><dd class="ui-mono">build-02</dd></div>
+        <div>
+          <dt>Spend</dt>
+          <dd>
+            $1.84 of $5.00
+            <span class="meter"><span style="--fill: 37%"></span></span>
+          </dd>
+        </div>
+      </dl>
+      <p class="label">Evidence · 5</p>
+      <ul class="evidence">
+        {
+          evidence.map((e) => (
+            <li>
+              <span class:list={["icon", e.mark]} />
+              <span class="what">
+                <span class="kind">{e.kind}</span>
+                <span class="ui-mono name">{e.label}</span>
+              </span>
+              <span class="result">{e.result}</span>
+              {e.mark === "shot" && (
+                <span class="thumb">
+                  <span />
+                  <span />
+                  <span />
+                </span>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+  <figcaption>
+    {caption}
+    <span class="visually-hidden">
+      The illustration shows run r-2381 for issue ENG-42, Add CSV export to invoices, marked
+      verified. A builder agent ran it with the claude-code harness on the machine build-02 and spent
+      $1.84 of a $5.00 budget. Its evidence: the test command passed 148 tests with exit code 0, the
+      lint command reported no problems, a screenshot of the export, pull request #128 changing six
+      files, and an approval from the reviewer agent.
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .mono-title {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+
+  .body {
+    padding: var(--space-4);
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .issue {
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-base);
+  }
+
+  .issue .ui-mono {
+    margin-right: var(--space-2);
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  dt {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  dd {
+    font-weight: var(--weight-semibold);
+  }
+
+  dd.ui-mono {
+    color: var(--color-text);
+  }
+
+  .meter {
+    display: block;
+    height: 4px;
+    margin-top: var(--space-1);
+    border-radius: var(--radius-pill);
+    background: var(--color-border);
+    overflow: hidden;
+  }
+
+  .meter span {
+    display: block;
+    width: var(--fill);
+    height: 100%;
+    background: var(--color-accent);
+  }
+
+  .label {
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: calc(-1 * var(--space-2));
+  }
+
+  .evidence {
+    list-style: none;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .evidence li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-1) var(--space-3);
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .evidence li:last-child {
+    border-bottom: 0;
+  }
+
+  .what {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-2);
+    min-width: 0;
+  }
+
+  .kind {
+    color: var(--color-text-muted);
+  }
+
+  .name {
+    color: var(--color-text);
+  }
+
+  .result {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-align: right;
+  }
+
+  .icon {
+    position: relative;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-accent);
+  }
+
+  .icon.check::after {
+    content: "";
+    position: absolute;
+    left: 0.375rem;
+    top: 0.1875rem;
+    width: 0.3rem;
+    height: 0.55rem;
+    border: solid var(--color-text);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .icon.shot,
+  .icon.pr {
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-subtle);
+    border-color: var(--color-border-strong);
+  }
+
+  .icon.pr::after {
+    content: "";
+    position: absolute;
+    inset: 0.3rem;
+    border-left: 2px solid var(--color-text);
+    border-right: 2px solid var(--color-text);
+  }
+
+  .thumb {
+    grid-column: 2 / -1;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--space-1);
+    height: 3.5rem;
+    padding: var(--space-1);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-subtle);
+  }
+
+  .thumb span {
+    border-radius: 3px;
+    background: var(--color-border);
+  }
+
+  .thumb span:first-child {
+    grid-row: 1 / 3;
+  }
+
+  .thumb span:last-child {
+    background: var(--color-accent-soft);
+    border: 1px solid var(--color-accent);
+  }
+</style>

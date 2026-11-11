@@ -6,7 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!dist", "!.astro", "!node_modules", "!docs/evidence"]
+    "includes": ["**", "!dist", "!.astro", "!node_modules", "!docs/evidence", "!**/*.md"]
   },
   "formatter": {
     "enabled": true,

@@ -1,0 +1,317 @@
+---
+import CallToAction from "../components/CallToAction.astro";
+import DecisionMatrix from "../components/illustrations/DecisionMatrix.astro";
+import Inbox from "../components/illustrations/Inbox.astro";
+import Playbook from "../components/illustrations/Playbook.astro";
+import Run from "../components/illustrations/Run.astro";
+import Base from "../layouts/Base.astro";
+import { MERGE_RULE } from "../lib/copy";
+import { ACCESS_REQUEST_URL, url } from "../lib/site";
+
+const audiences = [
+  {
+    title: "Founders and small product teams",
+    text: "You want agents to do real work, not demos, without losing control of your codebase, your spend or your customers.",
+  },
+  {
+    title: "Engineering leads adopting coding agents",
+    text: "You need review, evidence and policy around agents before their work reaches your main branch.",
+  },
+  {
+    title: "Services firms and support shops",
+    text: "You run work for clients and must show who did what, when and why.",
+  },
+];
+
+const model = [
+  { id: "work", name: "Work", text: "Teams, projects, issues, cycles, milestones." },
+  { id: "agents", name: "Agents", text: "Run real coding harnesses on your machines." },
+  { id: "decisions", name: "Decisions", text: "Autonomous, notify or approve." },
+  { id: "evidence", name: "Evidence", text: "Commands, tests, screenshots, pull requests." },
+  { id: "playbooks", name: "Playbooks", text: "Stages from charter to release." },
+  { id: "pods", name: "Pods", text: "The roles a stage needs." },
+  { id: "budgets", name: "Budgets", text: "Limits and spending thresholds." },
+];
+---
+
+<Base
+  title="vyuha"
+  description="vyuha is the platform on which a small team runs a company of AI agents: work tracked like a product team tracks it, evidence for every run, and decisions governed by tiers and budgets."
+  og="home"
+>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Agents, governed</p>
+        <h1>vyuha is where a small team runs a company of AI agents.</h1>
+        <p class="lead">
+          For founders, engineering leads and services firms who want agents to do real work, with
+          evidence for every run and decisions under rules you set.
+        </p>
+        <div class="actions">
+          <a class="button button-primary" href={url("/guide/")}>Read the getting-started guide</a>
+          <a class="button button-secondary" href={ACCESS_REQUEST_URL}>Request access</a>
+        </div>
+        <p class="note muted">Access is by request, through an issue on the public repository.</p>
+      </div>
+      <div class="hero-art">
+        <Inbox caption="The Inbox: decisions that need a person, each with its evidence." />
+      </div>
+    </div>
+  </section>
+
+  <section class="takeaway" aria-labelledby="work-title">
+    <div class="container split">
+      <div class="copy">
+        <p class="eyebrow">01 · Work</p>
+        <h2 id="work-title">Agents pick up the work you already track.</h2>
+        <p>
+          Work lives in teams, projects, issues, cycles and milestones, the way a product team
+          already tracks it. Agents pick it up and run real coding harnesses, Claude Code first and
+          others through adapters, on machines you control.
+        </p>
+        <p>
+          A playbook takes an engagement from charter to release. At each stage a pod hires the roles
+          that stage needs.
+        </p>
+      </div>
+      <div class="art">
+        <Playbook />
+      </div>
+    </div>
+  </section>
+
+  <section class="takeaway alt" aria-labelledby="evidence-title">
+    <div class="container split reverse">
+      <div class="copy">
+        <p class="eyebrow">02 · Evidence</p>
+        <h2 id="evidence-title">Every run leaves evidence.</h2>
+        <p>
+          Everything an agent does leaves evidence: the commands it ran, the tests, screenshots and
+          the pull request. A person or a reviewer agent checks it before the work counts as done.
+        </p>
+        <p class="rule">{MERGE_RULE}</p>
+      </div>
+      <div class="art">
+        <Run />
+      </div>
+    </div>
+  </section>
+
+  <section class="takeaway" aria-labelledby="governed-title">
+    <div class="container split">
+      <div class="copy">
+        <p class="eyebrow">03 · Control</p>
+        <h2 id="governed-title">The company stays governed.</h2>
+        <p>
+          Every decision has a tier: autonomous, notify or approve. Budgets and spending thresholds
+          limit what agents spend. Decisions that need a person wait in the Inbox.
+        </p>
+        <p>
+          Every action is in the audit trail, and a stop button halts every run within two seconds.
+        </p>
+      </div>
+      <div class="art">
+        <DecisionMatrix />
+      </div>
+    </div>
+  </section>
+
+  <section class="audiences" aria-labelledby="audiences-title">
+    <div class="container">
+      <p class="eyebrow">Who it is for</p>
+      <h2 id="audiences-title">Built for teams that answer for their work.</h2>
+      <ul class="cards">
+        {
+          audiences.map((a) => (
+            <li class="card">
+              <h3>{a.title}</h3>
+              <p>{a.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="model" aria-labelledby="model-title">
+    <div class="container">
+      <p class="eyebrow">The model</p>
+      <h2 id="model-title">Seven ideas, in plain words.</h2>
+      <ul class="model-grid">
+        {
+          model.map((m) => (
+            <li>
+              <a href={url(`/model/#${m.id}`)}>
+                <span class="model-name">{m.name}</span>
+                <span class="model-text">{m.text}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CallToAction />
+</Base>
+
+<style>
+  .hero {
+    padding-block: var(--space-8) var(--space-9);
+  }
+
+  .hero-grid {
+    display: grid;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .hero-copy {
+    display: grid;
+    gap: var(--space-5);
+    justify-items: start;
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    max-width: 16ch;
+  }
+
+  .note {
+    font-size: var(--text-sm);
+  }
+
+  @media (min-width: 64rem) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: var(--space-9);
+    }
+  }
+
+  .takeaway {
+    padding-block: var(--space-9);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .takeaway.alt {
+    background: var(--color-bg-subtle);
+  }
+
+  .split {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+  }
+
+  @media (min-width: 64rem) {
+    .split {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      gap: var(--space-9);
+    }
+
+    .split.reverse .copy {
+      order: 2;
+    }
+  }
+
+  .copy {
+    display: grid;
+    gap: var(--space-4);
+    max-width: var(--measure);
+  }
+
+  .copy h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .copy p:not(.eyebrow) {
+    color: var(--color-text-muted);
+  }
+
+  .copy .rule {
+    padding-left: var(--space-4);
+    border-left: 3px solid var(--color-accent);
+    color: var(--color-text);
+  }
+
+  .audiences,
+  .model {
+    padding-block: var(--space-9);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .audiences h2,
+  .model h2 {
+    font-size: var(--text-xl);
+    margin-top: var(--space-3);
+    max-width: 24ch;
+  }
+
+  .cards {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--space-7);
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 48rem) {
+    .cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .card {
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+    display: grid;
+    align-content: start;
+    gap: var(--space-2);
+  }
+
+  .card h3 {
+    font-size: var(--text-md);
+  }
+
+  .card p {
+    color: var(--color-text-muted);
+  }
+
+  .model-grid {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--space-7);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+    gap: var(--space-3);
+  }
+
+  .model-grid a {
+    display: grid;
+    gap: var(--space-1);
+    height: 100%;
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    text-decoration: none;
+    transition: border-color var(--duration) ease;
+  }
+
+  .model-grid a:hover {
+    border-color: var(--color-accent);
+  }
+
+  .model-name {
+    font-weight: var(--weight-semibold);
+  }
+
+  .model-text {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+</style>

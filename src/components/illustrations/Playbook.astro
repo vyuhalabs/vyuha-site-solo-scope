@@ -1,0 +1,158 @@
+---
+interface Props {
+  caption?: string;
+}
+const { caption = "A playbook's stages, with the pod each stage hires." } = Astro.props;
+
+const stages = [
+  { name: "Charter", state: "done", roles: ["lead (a person)"], exit: "charter approved" },
+  { name: "Plan", state: "done", roles: ["planner agent"], exit: "plan approved" },
+  {
+    name: "Build",
+    state: "current",
+    roles: ["builder agent", "builder agent"],
+    exit: "every issue verified",
+  },
+  { name: "Verify", state: "next", roles: ["reviewer agent", "QA agent"], exit: "checks green" },
+  { name: "Release", state: "next", roles: ["release agent"], exit: "release approved" },
+];
+const label = { done: "Done", current: "In progress · 7 of 11 issues", next: "Waiting" };
+---
+
+<figure class="illustration">
+  <div class="ui-frame" aria-hidden="true">
+    <div class="ui-bar">
+      <span>Playbook · charter to release</span>
+      <span class="ui-chip">Billing service</span>
+    </div>
+    <ol class="stages">
+      {
+        stages.map((s) => (
+          <li class={s.state}>
+            <span class="dot" />
+            <div class="content">
+              <div class="head">
+                <span class="name">{s.name}</span>
+                <span class="state">{label[s.state as keyof typeof label]}</span>
+              </div>
+              <div class="roles">
+                {s.roles.map((r) => (
+                  <span class:list={["ui-chip", { "ui-chip-accent": s.state === "current" }]}>{r}</span>
+                ))}
+              </div>
+              <div class="ui-mono">exit: {s.exit}</div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+  <figcaption>
+    {caption}
+    <span class="visually-hidden">
+      The illustration shows a playbook for a billing service with five stages. Charter, led by a
+      person, and Plan, run by a planner agent, are done. Build is in progress with two builder
+      agents and seven of eleven issues finished; it exits when every issue is verified. Verify,
+      with a reviewer agent and a QA agent, and Release, with a release agent, are waiting. Release
+      exits only when the release is approved.
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .stages {
+    list-style: none;
+    padding: var(--space-4);
+    display: grid;
+  }
+
+  .stages li {
+    display: grid;
+    grid-template-columns: 1.25rem 1fr;
+    gap: var(--space-3);
+    position: relative;
+    padding-bottom: var(--space-4);
+  }
+
+  .stages li:last-child {
+    padding-bottom: 0;
+  }
+
+  .stages li:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: calc(0.625rem - 1px);
+    top: 1.25rem;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-border);
+  }
+
+  .stages li.done:not(:last-child)::before {
+    background: var(--color-accent);
+  }
+
+  .dot {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: var(--radius-pill);
+    border: 2px solid var(--color-border-strong);
+    background: var(--color-surface);
+    position: relative;
+    z-index: 1;
+  }
+
+  .done .dot {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .current .dot {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 4px var(--color-accent-soft);
+  }
+
+  .current .dot::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: var(--radius-pill);
+    background: var(--color-accent);
+  }
+
+  .content {
+    display: grid;
+    gap: var(--space-2);
+    min-width: 0;
+  }
+
+  .current .content {
+    padding: var(--space-3);
+    margin: calc(-1 * var(--space-2)) 0 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-bg-subtle);
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0 var(--space-3);
+  }
+
+  .name {
+    font-weight: var(--weight-semibold);
+  }
+
+  .state {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+</style>
