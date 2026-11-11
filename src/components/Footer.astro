@@ -1,0 +1,74 @@
+---
+import { ACCESS_REQUEST_URL, NAV, REPO_URL, url } from "../lib/site";
+---
+
+<footer class="site-footer">
+  <div class="container grid">
+    <div>
+      <p class="name">vyuha</p>
+      <p class="muted small">
+        Sanskrit for a formation: an arrangement of forces that moves as one.
+      </p>
+    </div>
+    <nav aria-label="Footer">
+      <ul>
+        {NAV.map((item) => <li><a href={url(item.href)}>{item.label}</a></li>)}
+        <li><a href={ACCESS_REQUEST_URL}>Request access</a></li>
+        <li><a href={REPO_URL}>Site source on GitHub</a></li>
+      </ul>
+    </nav>
+    <p class="muted small note">This site sets no cookies and loads nothing from third parties.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-9);
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-subtle);
+    padding-block: var(--space-7);
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 48rem) {
+    .grid {
+      grid-template-columns: 1fr auto;
+    }
+  }
+
+  .name {
+    font-weight: var(--weight-semibold);
+  }
+
+  .small {
+    font-size: var(--text-sm);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    list-style: none;
+    padding: 0;
+    font-size: var(--text-sm);
+  }
+
+  a {
+    color: var(--color-text-muted);
+  }
+
+  a:hover {
+    color: var(--color-text);
+  }
+
+  .note {
+    grid-column: 1 / -1;
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+import textFont from "../assets/fonts/source-sans-3-latin-400-normal.woff2?url";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import Seo from "../components/Seo.astro";
+import type { OgSlug } from "../lib/site";
+import { url } from "../lib/site";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  og: OgSlug;
+  noindex?: boolean;
+}
+
+const { title, description, og, noindex } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)" />
+    <link rel="preload" href={textFont} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href={url("/favicon.svg")} type="image/svg+xml" />
+    <Seo title={title} description={description} og={og} noindex={noindex} />
+    <link rel="sitemap" href={url("/sitemap.xml")} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  main:focus {
+    outline: none;
+  }
+</style>

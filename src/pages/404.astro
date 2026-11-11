@@ -1,0 +1,34 @@
+---
+import Base from "../layouts/Base.astro";
+import { url } from "../lib/site";
+---
+
+<Base
+  title="Page not found"
+  description="The page you asked for is not on the vyuha site. Go back to the home page, the model, the guide or the FAQ."
+  og="404"
+  noindex
+>
+  <div class="container not-found">
+    <p class="eyebrow">404</p>
+    <h1>This page is not here.</h1>
+    <p class="lead">The address may be mistyped, or the page may have moved.</p>
+    <div class="actions">
+      <a class="button button-primary" href={url("/")}>Go to the home page</a>
+      <a class="button button-secondary" href={url("/guide/")}>Read the guide</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .not-found {
+    display: grid;
+    gap: var(--space-5);
+    justify-items: start;
+    padding-block: var(--space-10);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+  }
+</style>
