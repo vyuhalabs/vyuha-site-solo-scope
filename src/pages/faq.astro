@@ -1,0 +1,63 @@
+---
+import { getCollection, render } from "astro:content";
+import Doc from "../layouts/Doc.astro";
+
+const entries = (await getCollection("faq")).sort((a, b) => a.data.order - b.data.order);
+const items = await Promise.all(
+  entries.map(async (entry) => ({
+    id: entry.id.replace(/^\d+-/, ""),
+    question: entry.data.question,
+    Content: (await render(entry)).Content,
+  })),
+);
+---
+
+<Doc
+  title="FAQ"
+  description="Short answers about vyuha: who it is for, how to get access, which harnesses agents run, how merges, budgets and the stop button work."
+  og="faq"
+  eyebrow="FAQ"
+  heading="Questions and answers"
+  lead="Short answers to the questions people ask first. For the first steps, read the getting-started guide."
+  toc={items.map((i) => ({ id: i.id, text: i.question }))}
+>
+  <div class="faq">
+    {
+      items.map(({ id, question, Content }) => (
+        <section class="item" aria-labelledby={id}>
+          <h2 id={id}>{question}</h2>
+          <div class="prose">
+            <Content />
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</Doc>
+
+<style>
+  .faq {
+    display: grid;
+    max-width: var(--measure);
+  }
+
+  .item {
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .item:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  h2 {
+    font-size: var(--text-md);
+    margin-bottom: var(--space-3);
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    color: var(--color-text-muted);
+  }
+</style>

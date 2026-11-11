@@ -1,0 +1,70 @@
+---
+import CallToAction from "../components/CallToAction.astro";
+import PageHeader from "../components/PageHeader.astro";
+import Toc from "../components/Toc.astro";
+import type { OgSlug } from "../lib/site";
+import Base from "./Base.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  og: OgSlug;
+  eyebrow: string;
+  heading: string;
+  lead: string;
+  toc: { id: string; text: string }[];
+  cta?: boolean;
+}
+
+const { title, description, og, eyebrow, heading, lead, toc, cta = true } = Astro.props;
+---
+
+<Base title={title} description={description} og={og}>
+  <PageHeader eyebrow={eyebrow} title={heading} lead={lead}><slot name="header" /></PageHeader>
+  <div class="container doc">
+    <aside class="side">
+      <Toc label={`${heading}: sections`} items={toc} />
+    </aside>
+    <div class="body">
+      <slot />
+    </div>
+  </div>
+  {cta && <CallToAction />}
+</Base>
+
+<style>
+  .doc {
+    display: grid;
+    gap: var(--space-6);
+    padding-top: var(--space-7);
+  }
+
+  .body {
+    min-width: 0;
+  }
+
+  @media (min-width: 64rem) {
+    .doc {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: var(--space-9);
+    }
+
+    .side {
+      order: 0;
+    }
+
+    .side :global(.toc) {
+      position: sticky;
+      top: var(--space-6);
+    }
+  }
+
+  @media (max-width: 63.99rem) {
+    .side {
+      padding: var(--space-4) var(--space-5);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-bg-subtle);
+    }
+  }
+</style>

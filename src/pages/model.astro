@@ -1,0 +1,88 @@
+---
+import { getCollection, render } from "astro:content";
+import DecisionMatrix from "../components/illustrations/DecisionMatrix.astro";
+import Inbox from "../components/illustrations/Inbox.astro";
+import Playbook from "../components/illustrations/Playbook.astro";
+import Run from "../components/illustrations/Run.astro";
+import Doc from "../layouts/Doc.astro";
+
+const entries = (await getCollection("docs", (e) => e.id.startsWith("model/"))).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const sections = await Promise.all(
+  entries.map(async (entry) => ({
+    id: entry.data.title.toLowerCase(),
+    title: entry.data.title,
+    illustration: entry.data.illustration,
+    Content: (await render(entry)).Content,
+  })),
+);
+---
+
+<Doc
+  title="The model"
+  description="How vyuha works, in plain words: work, agents, decisions, evidence, playbooks, pods and budgets."
+  og="model"
+  eyebrow="The model"
+  heading="How vyuha works, in seven parts"
+  lead="Work, agents, decisions, evidence, playbooks, pods and budgets. Each part in plain words, with what it looks like in the product."
+  toc={sections.map((s) => ({ id: s.id, text: s.title }))}
+>
+  <div class="sections">
+    {
+      sections.map(({ id, title, illustration, Content }, index) => (
+        <section class="section" aria-labelledby={id}>
+          <p class="eyebrow">{String(index + 1).padStart(2, "0")}</p>
+          <h2 id={id}>{title}</h2>
+          <div class="prose">
+            <Content />
+          </div>
+          {illustration && (
+            <div class="art">
+              {illustration === "matrix" && <DecisionMatrix />}
+              {illustration === "run" && <Run />}
+              {illustration === "playbook" && <Playbook />}
+              {illustration === "inbox" && (
+                <Inbox caption="A budget approval in the Inbox, next to the other decisions that need a person." />
+              )}
+            </div>
+          )}
+        </section>
+      ))
+    }
+  </div>
+</Doc>
+
+<style>
+  .section {
+    padding-block: var(--space-7);
+    border-top: 1px solid var(--color-border);
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .section:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .prose :global(p),
+  .prose :global(li) {
+    color: var(--color-text-muted);
+  }
+
+  .prose :global(strong) {
+    color: var(--color-text);
+    font-weight: var(--weight-semibold);
+  }
+
+  .art {
+    margin-top: var(--space-5);
+    max-width: 40rem;
+  }
+</style>
