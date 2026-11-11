@@ -1,0 +1,30 @@
+name: build
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SITE_URL: https://vyuhalabs.github.io/vyuha-site-solo-scope
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - name: Install
+        run: pnpm install --frozen-lockfile
+      - name: astro check
+        run: pnpm exec astro check
+      - name: astro build
+        run: pnpm exec astro build
+      - name: Internal link check over dist/
+        run: node scripts/check-links.mjs
